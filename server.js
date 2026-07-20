@@ -7,6 +7,7 @@
  *   - Load environment variables (dotenv)
  *   - Connect to MongoDB Atlas
  *   - Configure Express middleware (JSON body parsing, CORS)
+ *   - Serve static frontend files
  *   - Mount API routes
  *   - Start the HTTP listener
  * --------------------------------------------------------------------------
@@ -15,6 +16,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/db');
 const apiRoutes = require('./routes/api');
 
@@ -36,10 +38,8 @@ app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// --- Root Landing / Welcome Route ------------------------------------
-app.get('/', (req, res) => {
-  res.status(200).json({ status: 'live', message: 'DevDocAssistant API is up and running!' });
-});
+// --- Serve static frontend files -------------------------------------
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // --- Health check -------------------------------------------------------
 app.get('/health', (req, res) => {
@@ -76,7 +76,6 @@ if (require.main === module) {
 }
 
 module.exports = app;
-
 //old code for referene!
 // require('dotenv').config();
 
